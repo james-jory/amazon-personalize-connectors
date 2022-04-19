@@ -2,6 +2,8 @@
 
 This project provides a connector framework that provides a general purpose ETL pipeline for consuming output from Amazon Personalize batch inference jobs, decorating recommended itemId's from Personalize with rich item metadata needed to render them in customer-facing tools/applications, and sending the decorated output to a supported downstream destination. Currently the only supported destination is the [Braze](https://www.braze.com/) customer engagement platform. Additional destinations can be easily plugged into this framework.
 
+![Amazon Personalize Connectors](./images/amazon_personalize_connectors_architecture.png)
+
 ## Batch Inference
 
 This solution builds upon the automation of batch inference jobs provided in the [Maintaining Personalized Experiences with Machine Learning](https://aws.amazon.com/solutions/implementations/maintaining-personalized-experiences-with-ml/) solution. That is, you must deploy that solution before deploying this solution and the ouput of batch inference jobs from that solution is used as input for this solution.
