@@ -41,8 +41,8 @@ def call_braze_user_track(attributes: List):
         'X-Braze-Bulk': 'true'
     }
 
-    #r = requests.post(braze_rest_endpoint_url + '/users/track', json=data, headers=headers)
-    logger.info('Calling Braze with: %s', data)
+    logger.debug('Calling Braze with: %s', data)
+    requests.post(braze_rest_endpoint_url + '/users/track', json=data, headers=headers)
 
 @logger.inject_lambda_context
 @tracer.capture_lambda_handler
