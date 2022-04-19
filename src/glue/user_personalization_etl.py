@@ -109,7 +109,7 @@ logger.info(f"Loaded {batch_inference_full_dyf.count()} documents from {batch_in
 user_recs_df = batch_inference_full_dyf.toDF().where("error IS NULL")
 logger.info(f"Isolated {user_recs_df.count()} documents without errors")
 
-if config.get("isolateBatchInferenceErrors", False):
+if config.get("saveBatchInferenceErrors", False):
     # Isolate docs/rows with errors
     errors_df = batch_inference_full_dyf.toDF().where("error IS NOT NULL")
     logger.info(f"Isolated {errors_df.count()} documents with errors")
