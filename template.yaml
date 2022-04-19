@@ -286,7 +286,6 @@ Resources:
       Timeout: 900
       CodeUri: src/braze_enqueue_function
       Handler: main.lambda_handler
-      MemorySize: 1024
       Layers:
         - !Sub 'arn:${AWS::Partition}:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPython:17'
         - !Ref EnqueueCommonLayer
@@ -328,12 +327,14 @@ Resources:
     Condition: DeployBrazeResources
     Type: AWS::SQS::Queue
     Properties:
+      VisibilityTimeout: 610  # (Dequeue function Timeout * 6) + MaximumBatchingWindowInSeconds (https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-eventsource)
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt BrazeUserDeadLetterQueue.Arn
         maxReceiveCount: 5
       Tags:
         - Key: CreatedBy
           Value: Amazon-Personalize-Connectors-Solution
+
   BrazeDequeueFunction:
     Condition: DeployBrazeResources
     Type: AWS::Serverless::Function
@@ -342,7 +343,7 @@ Resources:
       Timeout: 10
       CodeUri: src/braze_dequeue_function
       Handler: main.lambda_handler
-      MemorySize: 1024
+      ReservedConcurrentExecutions: 100
       Layers:
         - !Sub 'arn:${AWS::Partition}:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPython:17'
       Policies:
@@ -365,7 +366,7 @@ Resources:
           Type: SQS
           Properties:
             Queue: !GetAtt BrazeUserQueue.Arn
-            BatchSize: 10 # Braze max is 75 per user track API call
+            BatchSize: 50 # Braze max is 75 per user track API call
             MaximumBatchingWindowInSeconds: 10
             Enabled: true
 
