@@ -162,3 +162,31 @@ You can optionally provide item metadata file(s) that provide the metadata neede
 ```
 
 These files must be placed in the `input/item_metadata/` folder (see steps above for details).
+
+## Installation
+
+**You must have the [Maintaining Personalized Experiences with Machine Learning](https://aws.amazon.com/solutions/implementations/maintaining-personalized-experiences-with-ml/) solution installed before you can complete the steps below.**
+
+This solution uses the AWS [Serverless Application Model](https://aws.amazon.com/serverless/sam/) (SAM) to build and deploy resources into your AWS account.
+
+To use the SAM CLI, you need the following tools locally installed.
+
+* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+* [Python 3 installed](https://www.python.org/downloads/)
+* Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community)
+
+First, ensure you are logged in to `public.ecr.aws` in Docker so SAM can download the Docker build images, by running the following command.
+
+```bash
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+```
+
+To build and deploy the application for the first time, run the following in your shell:
+
+```bash
+cd amazon-personalize-connectors
+sam build --use-container --cached
+sam deploy --guided
+```
+
+The `sam build --use-container --cached` command will build and package the source of the solution. The `sam deploy --guided` command will prompt you for deployment configuration information and ultimately deploy the solution to your AWS account. **Be sure to deploy the solution in the same AWS region where your Amazon Personalize workload and the [Maintaining Personalized Experiences with Machine Learning](https://aws.amazon.com/solutions/implementations/maintaining-personalized-experiences-with-ml/) solution is installed.
